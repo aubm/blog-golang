@@ -27,3 +27,8 @@ func SavePost(post *models.Post) {
 		db.Save(post)
 	}
 }
+
+func DeletePost(post *models.Post) {
+	db := database.GetDatabaseLayer()
+	db.Delete(post)
+}

@@ -8,6 +8,7 @@ import (
 
 func main() {
 	var handler routing.Handler
+	handler.AddPublicDir("./public")
 	handler.RegisterRoute(routing.Route{`^/api/posts$`, []string{"GET"}, postsctrl.IndexController})
 	handler.RegisterRoute(routing.Route{`^/api/posts/([0-9]+)$`, []string{"GET"}, postsctrl.DetailsController})
 	handler.RegisterRoute(routing.Route{`^/api/posts$`, []string{"POST"}, postsctrl.AddController})

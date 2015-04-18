@@ -21,8 +21,7 @@ func IndexController(w http.ResponseWriter, r *http.Request, pathVars []string) 
 }
 
 func DetailsController(w http.ResponseWriter, r *http.Request, pathVars []string) {
-	postId, _ := strconv.ParseInt(pathVars[0], 10, 64)
-	post := postsservice.GetOnePost(postId)
+	post := findPostByStringId(pathVars[0])
 	b, err := json.Marshal(post)
 	if err != nil {
 		fmt.Println("error:", err)
@@ -43,14 +42,38 @@ func AddController(w http.ResponseWriter, r *http.Request, pathVars []string) {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
+	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	io.WriteString(w, string(b[:]))
 }
 
 func UpdateController(w http.ResponseWriter, r *http.Request, pathVars []string) {
-	// TODO
+	post := findPostByStringId(pathVars[0])
+	title := r.PostFormValue("title")
+	if title != "" {
+		post.Title = title
+	}
+	content := r.PostFormValue("content")
+	if content != "" {
+		post.Content = content
+	}
+	postsservice.SavePost(&post)
+	b, err := json.Marshal(post)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	io.WriteString(w, string(b[:]))
 }
 
 func DeleteController(w http.ResponseWriter, r *http.Request, pathVars []string) {
-	// TODO
+	post := findPostByStringId(pathVars[0])
+	postsservice.DeletePost(&post)
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func findPostByStringId(postIdString string) models.Post {
+	postId, _ := strconv.ParseInt(postIdString, 10, 64)
+	post := postsservice.GetOnePost(postId)
+	return post
 }

@@ -3,18 +3,34 @@ package routing
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"path"
 	"regexp"
 )
 
 type Handler struct {
-	routes []Route
+	routes     []Route
+	publicDirs []string
 }
 
 func (h *Handler) RegisterRoute(r Route) {
 	h.routes = append(h.routes, r)
 }
 
+func (h *Handler) AddPublicDir(newPublicDir string) {
+	h.publicDirs = append(h.publicDirs, newPublicDir)
+}
+
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// First check if we can serve a static file
+	for _, dir := range h.publicDirs {
+		filePathName := path.Join(dir, r.URL.Path)
+		if fileInfo, err := os.Stat(filePathName); err == nil && fileInfo.IsDir() == false {
+			http.ServeFile(w, r, filePathName)
+			return
+		}
+	}
+
 	for _, route := range h.routes {
 		if !h.isHttpMethodAllowed(route, *r) {
 			continue
@@ -26,6 +42,7 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		route.Handler(w, r, pathVars)
 		return
 	}
+
 	fmt.Println("No pattern found")
 }
 
