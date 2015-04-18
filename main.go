@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/aubm/blog/controllers/postsctrl"
-	"github.com/aubm/blog/services/routing"
+	"github.com/aubm/blog-golang/controllers/postsctrl"
+	"github.com/aubm/blog-golang/services/routing"
 	"net/http"
 )
 

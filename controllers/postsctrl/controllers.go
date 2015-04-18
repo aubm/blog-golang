@@ -3,8 +3,8 @@ package postsctrl
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aubm/blog/models"
-	"github.com/aubm/blog/services/postsservice"
+	"github.com/aubm/blog-golang/models"
+	"github.com/aubm/blog-golang/services/postsservice"
 	"io"
 	"net/http"
 	"strconv"

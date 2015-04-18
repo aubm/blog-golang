@@ -1,8 +1,8 @@
 package postsservice
 
 import (
-	"github.com/aubm/blog/models"
-	"github.com/aubm/blog/services/database"
+	"github.com/aubm/blog-golang/models"
+	"github.com/aubm/blog-golang/services/database"
 )
 
 func GetPosts() []models.Post {
