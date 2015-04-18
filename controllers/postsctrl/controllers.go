@@ -10,6 +10,11 @@ import (
 	"strconv"
 )
 
+type requestBody struct {
+	Title   string
+	Content string
+}
+
 func IndexController(w http.ResponseWriter, r *http.Request, pathVars []string) {
 	posts := postsservice.GetPosts()
 	b, err := json.Marshal(posts)
@@ -31,11 +36,10 @@ func DetailsController(w http.ResponseWriter, r *http.Request, pathVars []string
 }
 
 func AddController(w http.ResponseWriter, r *http.Request, pathVars []string) {
-	title := r.PostFormValue("title")
-	content := r.PostFormValue("content")
+	body := decodeRequestJsonBody(r)
 	newPost := models.Post{
-		Title:   title,
-		Content: content,
+		Title:   body.Title,
+		Content: body.Content,
 	}
 	postsservice.SavePost(&newPost)
 	b, err := json.Marshal(newPost)
@@ -49,13 +53,12 @@ func AddController(w http.ResponseWriter, r *http.Request, pathVars []string) {
 
 func UpdateController(w http.ResponseWriter, r *http.Request, pathVars []string) {
 	post := findPostByStringId(pathVars[0])
-	title := r.PostFormValue("title")
-	if title != "" {
-		post.Title = title
+	body := decodeRequestJsonBody(r)
+	if body.Title != "" {
+		post.Title = body.Title
 	}
-	content := r.PostFormValue("content")
-	if content != "" {
-		post.Content = content
+	if body.Content != "" {
+		post.Content = body.Content
 	}
 	postsservice.SavePost(&post)
 	b, err := json.Marshal(post)
@@ -76,4 +79,14 @@ func findPostByStringId(postIdString string) models.Post {
 	postId, _ := strconv.ParseInt(postIdString, 10, 64)
 	post := postsservice.GetOnePost(postId)
 	return post
+}
+
+func decodeRequestJsonBody(r *http.Request) requestBody {
+	decoder := json.NewDecoder(r.Body)
+	var parsedBody requestBody
+	err := decoder.Decode(&parsedBody)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return parsedBody
 }

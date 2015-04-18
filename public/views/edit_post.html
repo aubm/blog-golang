@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <form>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" ng-model="post.title"/>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea class="form-control" ng-model="post.content" id="content"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" ng-click="submitForm()" ng-disabled="submitIsDisabled">Submit</button>
+                    <button class="btn btn-default" ng-click="cancelForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

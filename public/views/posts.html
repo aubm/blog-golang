@@ -1,3 +1,22 @@
 <div class="container">
-    <h1>{{pageHeader}}</h1>
+    <div class="row">
+        <div class="col-sm-12">
+            <a class="btn btn-default" href="#posts/edit/0">Create a new post</a>
+        </div>
+    </div>
+    <h1>Welcome to my blog !</h1>
+    <div class="row">
+        <article class="col-sm-12" ng-repeat="post in posts | orderBy: '-created_at'">
+            <header>
+                <h2><a href="#posts/{{post.id}}">{{post.title}}</a>&nbsp;
+                    <button class="btn btn-danger" ng-click="deletePost(post.id)">Delete post</button></h2>
+            </header>
+            <section>
+                <p>{{post.content | limitTo: 300}}...</p>
+            </section>
+            <footer>
+                <div class="date">{{post.created_at | date : format : 'medium'}}</div>
+            </footer>
+        </article>
+    </div>
 </div>

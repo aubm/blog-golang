@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        <div>
+            <p><a href="#posts" class="btn btn-default">Go back to posts list</a></p>
+        </div>
+        <article class="col-sm-12">
+            <header>
+                <h1>{{post.title}}&nbsp;
+                    <a class="btn btn-primary" href="#posts/edit/{{post.id}}">Edit post</a></h1>
+            </header>
+            <section>
+                <p>{{post.content}}</p>
+            </section>
+            <footer>
+                <div class="date">{{post.created_at | date : format : 'medium'}}</div>
+            </footer>
+        </article>
+    </div>
+</div>
